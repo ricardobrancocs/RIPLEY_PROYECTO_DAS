@@ -1,0 +1,130 @@
+<div class="topbar">
+  <span class="title">Proveedores</span>
+</div>
+
+<div class="tabs">
+  <button class="tab" [class.active]="tab==='lista'"
+          (click)="tab='lista'">
+    Lista de proveedores
+  </button>
+  <button class="tab" [class.active]="tab==='registrar'"
+          (click)="tab='registrar'; cancelarEdicion()">
+    Registrar proveedor
+  </button>
+  <button class="tab" [class.active]="tab==='entrega'"
+          (click)="tab='entrega'">
+    Registrar entrega
+  </button>
+</div>
+
+<div class="content">
+
+  <!-- LISTA -->
+  <div *ngIf="tab==='lista'">
+    <div class="card">
+      <div class="chd">
+        <span class="ct">Proveedores registrados</span>
+        <button class="btn-refresh" (click)="cargarProveedores()">↻ Actualizar</button>
+      </div>
+      <div *ngIf="loadingLista" class="loading">Cargando proveedores...</div>
+      <div *ngIf="!loadingLista && proveedores.length === 0" class="empty">
+        Sin proveedores registrados aún.
+      </div>
+      <table *ngIf="!loadingLista && proveedores.length > 0">
+        <thead>
+          <tr>
+            <th>ID</th><th>Empresa</th><th>Contacto</th>
+            <th>Teléfono</th><th>Correo</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of proveedores">
+            <td>#{{ p.idProveedor }}</td>
+            <td><strong>{{ p.empresa }}</strong></td>
+            <td>{{ p.contacto }}</td>
+            <td>{{ p.telefono }}</td>
+            <td>{{ p.correo }}</td>
+            <td><button class="btn-edit" (click)="iniciarEdicion(p)">Editar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REGISTRAR / EDITAR -->
+  <div *ngIf="tab==='registrar'">
+    <div class="card">
+      <div class="chd">
+        <span class="ct">{{ editando ? 'Editar proveedor' : 'Registrar nuevo proveedor' }}</span>
+        <span *ngIf="editando" class="badge-edit">Modo edición</span>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Empresa</label>
+          <input [ngModel]="editando ? editando.empresa : formProveedor.empresa"
+                (ngModelChange)="editando ? editando.empresa=$event : formProveedor.empresa=$event"
+                placeholder="Nombre de la empresa" />
+        </div>
+        <div class="field">
+          <label>Contacto</label>
+          <input [ngModel]="editando ? editando.contacto : formProveedor.contacto"
+                (ngModelChange)="editando ? editando.contacto=$event : formProveedor.contacto=$event"
+                placeholder="Nombre del contacto" />
+        </div>
+        <div class="field">
+          <label>Teléfono</label>
+          <input [ngModel]="editando ? editando.telefono : formProveedor.telefono"
+                (ngModelChange)="editando ? editando.telefono=$event : formProveedor.telefono=$event"
+                placeholder="01-XXXXXXX" />
+        </div>
+        <div class="field">
+          <label>Correo</label>
+          <input [ngModel]="editando ? editando.correo : formProveedor.correo"
+                (ngModelChange)="editando ? editando.correo=$event : formProveedor.correo=$event"
+                placeholder="email@empresa.com" />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-p" (click)="registrarProveedor()" [disabled]="loadingP">
+          {{ loadingP ? 'Guardando...' : editando ? 'Actualizar proveedor' : 'Registrar proveedor' }}
+        </button>
+        <button *ngIf="editando" class="btn-cancel" (click)="cancelarEdicion()">Cancelar</button>
+      </div>
+      <div *ngIf="okP"  class="ok">Proveedor guardado correctamente.</div>
+      <div *ngIf="errP" class="err">{{ errP }}</div>
+    </div>
+  </div>
+
+  <!-- ENTREGA -->
+  <div *ngIf="tab==='entrega'">
+    <div class="card">
+      <div class="chd"><span class="ct">Registrar entrega de proveedor</span></div>
+      <div class="form-grid">
+        <div class="field">
+          <label>ID Proveedor</label>
+          <input type="number" [(ngModel)]="formEntrega.idProveedor" placeholder="Ej: 1" />
+        </div>
+        <div class="field">
+          <label>ID Producto</label>
+          <input type="number" [(ngModel)]="formEntrega.idProducto" placeholder="Ej: 2" />
+        </div>
+        <div class="field">
+          <label>Cantidad recibida</label>
+          <input type="number" [(ngModel)]="formEntrega.cantidad" placeholder="Ej: 50" />
+        </div>
+        <div class="field">
+          <label>Calificación (1-5)</label>
+          <input type="number" [(ngModel)]="formEntrega.calificacion" min="1" max="5" />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-p" (click)="registrarEntrega()" [disabled]="loadingE">
+          {{ loadingE ? 'Guardando...' : 'Registrar entrega' }}
+        </button>
+      </div>
+      <div *ngIf="okE"  class="ok">Entrega registrada correctamente.</div>
+      <div *ngIf="errE" class="err">{{ errE }}</div>
+    </div>
+  </div>
+
+</div>

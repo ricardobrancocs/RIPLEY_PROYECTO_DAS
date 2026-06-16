@@ -1,0 +1,30 @@
+<div class="topbar">
+  <span class="title">Alertas de stock</span>
+  <span class="count" *ngIf="alertas.length > 0">{{ alertas.length }} activas</span>
+</div>
+
+<div class="content">
+  <div *ngIf="loading" class="empty">Cargando alertas...</div>
+
+  <div *ngFor="let a of alertas" class="al-row">
+    <div class="dot" [ngClass]="getDotClass(a.tipoAlerta)"></div>
+    <div class="al-body">
+      <div class="al-title">{{ a.tipoAlerta }} — Producto #{{ a.idProducto }}</div>
+      <div class="al-msg">{{ a.mensaje }}</div>
+      <div class="al-fecha">{{ a.fechaAlerta | date:'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+    <div class="al-actions">
+      <button class="btn-atender" (click)="atender(a.idAlerta)"
+        [disabled]="a.estado === 'ATENDIDA'">
+        {{ a.estado === 'ATENDIDA' ? 'Atendida' : 'Atender' }}
+      </button>
+      <button class="btn-descartar" (click)="descartar(a.idAlerta)">
+        Descartar
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && alertas.length === 0" class="empty">
+    Sin alertas activas.
+  </div>
+</div>

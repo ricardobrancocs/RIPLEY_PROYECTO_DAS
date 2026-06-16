@@ -1,0 +1,62 @@
+<div class="topbar">
+  <span class="title">Dashboard</span>
+  <span class="badge-green">WildFly activo</span>
+</div>
+
+<div class="content">
+  <div class="metrics">
+    <div class="mc">
+      <div class="ml">Productos</div>
+      <div class="mv">{{ stock.length }}</div>
+      <div class="ms">en inventario</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Alertas activas</div>
+      <div class="mv amber">{{ alertasCount }}</div>
+      <div class="ms">stock bajo/crítico</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Ventas</div>
+      <div class="mv">{{ ventasCount }}</div>
+      <div class="ms">totales registradas</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Usuario</div>
+      <div class="mv small">{{ usuario }}</div>
+      <div class="ms">sesión activa</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chd"><span class="ct">Stock por producto</span></div>
+    <div *ngIf="loading" class="empty">Cargando...</div>
+    <table *ngIf="!loading">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Stock actual</th>
+          <th>Mínimo</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of stock">
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.stockActual }}</td>
+          <td>{{ p.stockMinimo }}</td>
+          <td>
+            <span class="badge"
+              [ngClass]="{
+                'badge-green': p.estado === 'NORMAL',
+                'badge-amber': p.estado === 'BAJO',
+                'badge-red':   p.estado === 'CRITICO'
+              }">
+              {{ p.estado }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loading && stock.length === 0" class="empty">Sin productos registrados.</div>
+  </div>
+</div>

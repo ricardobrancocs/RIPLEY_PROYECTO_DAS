@@ -1,0 +1,27 @@
+<div class="topbar">
+  <span class="title">Alertas de stock</span>
+  <span class="badge-ro">Solo lectura</span>
+</div>
+
+<div class="content">
+  <div class="info-box">
+    Solo lectura — el administrador atiende y descarta las alertas.
+    Notifica al admin si detectas un producto crítico.
+  </div>
+
+  <div *ngIf="loading" class="empty">Cargando alertas...</div>
+
+  <div *ngFor="let a of alertas" class="al-row">
+    <div class="dot" [style.background]="getDotColor(a.tipoAlerta)"></div>
+    <div class="al-body">
+      <div class="al-title">{{ a.tipoAlerta }} — Producto #{{ a.idProducto }}</div>
+      <div class="al-msg">{{ a.mensaje }}</div>
+      <div class="al-fecha">{{ a.fechaAlerta | date:'dd/MM/yyyy HH:mm' }}</div>
+    </div>
+    <span class="badge-estado">{{ a.estado }}</span>
+  </div>
+
+  <div *ngIf="!loading && alertas.length === 0" class="empty">
+    Sin alertas activas.
+  </div>
+</div>

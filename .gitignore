@@ -1,0 +1,18 @@
+﻿# Angular
+ripley-fronted/node_modules/
+ripley-fronted/dist/
+ripley-fronted/.angular/
+
+# Java / Maven
+ripley-backend/target/
+*.class
+*.war
+*.ear
+
+# IDEs
+.vscode/settings.json
+.idea/
+*.iml
+
+# Logs
+*.log

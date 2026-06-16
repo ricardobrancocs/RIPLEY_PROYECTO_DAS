@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+version="3.0">
+
+    <persistence-unit name="proyecto-pu" transaction-type="JTA">
+    <jta-data-source>java:/PostgresDS</jta-data-source>
+
+        <!-- ── Models registrados ────────────────────────── -->
+        <class>com.proyecto.infrastructure.models.VentaModel</class>
+        <class>com.proyecto.infrastructure.models.DetalleVentaModel</class>
+        <class>com.proyecto.infrastructure.models.CategoriaModel</class>
+        <class>com.proyecto.infrastructure.models.ProductoModel</class>
+        <class>com.proyecto.infrastructure.models.ProveedorModel</class>
+        <class>com.proyecto.infrastructure.models.EntradaInventarioModel</class>
+        <class>com.proyecto.infrastructure.models.SalidaInventarioModel</class>
+        <class>com.proyecto.infrastructure.models.PrediccionIaModel</class>
+        <class>com.proyecto.infrastructure.models.AlertaStockModel</class>
+        <class>com.proyecto.infrastructure.models.UsuarioModel</class>
+        <class>com.proyecto.infrastructure.models.RecomendacionModel</class>
+        <class>com.proyecto.infrastructure.models.ClasificacionAbcModel</class>
+        <class>com.proyecto.infrastructure.models.SimulacionModel</class>
+        <class>com.proyecto.infrastructure.models.TrazabilidadModel</class>
+
+        <properties>
+            <!-- ── Dialecto PostgreSQL ──────────────────── -->
+            <property name="hibernate.dialect"
+            value="org.hibernate.dialect.PostgreSQLDialect"/>
+
+            <!-- ── Mostrar SQL en consola (debug) ──────── -->
+            <property name="hibernate.show_sql"     value="true"/>
+            <property name="hibernate.format_sql"   value="true"/>
+
+            <!--
+                validate = verifica que las tablas existan sin modificarlas
+                update   = actualiza tablas si hay cambios (cuidado en prod)
+                create   = crea tablas desde cero (borra datos existentes)
+            -->
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

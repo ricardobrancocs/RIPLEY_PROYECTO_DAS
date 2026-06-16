@@ -1,0 +1,53 @@
+<div class="topbar">
+  <span class="title">Predicciones IA</span>
+</div>
+
+<div class="content">
+  <div class="card">
+    <div class="chd"><span class="ct">Ejecutar nueva predicción</span></div>
+    <div class="form-row">
+      <div class="field">
+        <label>ID Producto</label>
+        <input type="number" [(ngModel)]="form.idProducto" placeholder="Ej: 1" />
+      </div>
+      <div class="field">
+        <label>Horizonte (días)</label>
+        <input type="number" [(ngModel)]="form.horizonteDias" placeholder="Ej: 30" />
+      </div>
+      <button class="btn-p" (click)="ejecutar()" [disabled]="loading">
+        {{ loading ? 'Procesando...' : 'Ejecutar predicción' }}
+      </button>
+    </div>
+    <div *ngIf="error" class="err">{{ error }}</div>
+  </div>
+
+  <div class="card">
+    <div class="chd"><span class="ct">Resultados de predicciones</span></div>
+    <div *ngIf="cargando" class="empty">Cargando predicciones...</div>
+    <table *ngIf="!cargando">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Demanda estimada</th>
+          <th>Horizonte</th>
+          <th>Fecha</th>
+          <th>Confianza</th>
+          <th>Recomendación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of predicciones">
+          <td>#{{ p.idProducto }}</td>
+          <td><strong>{{ p.demandaEstimada }}</strong> unidades</td>
+          <td>{{ p.horizonteDias }} días</td>
+          <td>{{ p.fechaPrediccion | date:'dd/MM/yyyy' }}</td>
+          <td><span class="badge badge-amber">{{ p.nivelConfianza }}%</span></td>
+          <td>{{ p.recomendacion }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!cargando && predicciones.length === 0" class="empty">
+      Sin predicciones registradas. Ejecuta el modelo arriba.
+    </div>
+  </div>
+</div>

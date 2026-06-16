@@ -1,0 +1,63 @@
+<div class="topbar">
+  <span class="title">Ventas</span>
+  <span class="subtitle">Solo visualización — registradas por empleados</span>
+</div>
+
+<div class="content">
+  <div class="metrics">
+    <div class="mc">
+      <div class="ml">Total ventas</div>
+      <div class="mv">{{ ventas.length }}</div>
+      <div class="ms">registradas</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Completadas</div>
+      <div class="mv g">{{ completadas }}</div>
+      <div class="ms">pagadas</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Pendientes</div>
+      <div class="mv a">{{ pendientes }}</div>
+      <div class="ms">por cobrar</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Devoluciones</div>
+      <div class="mv r">{{ devoluciones }}</div>
+      <div class="ms">procesadas</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chd">
+      <span class="ct">Historial de ventas</span>
+    </div>
+    <div *ngIf="loading" class="empty">Cargando ventas...</div>
+    <table *ngIf="!loading">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Empleado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of ventas">
+          <td>#{{ v.idVenta }}</td>
+          <td>{{ v.fechaVenta | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>S/ {{ v.total | number:'1.2-2' }}</td>
+          <td>
+            <span class="badge" [ngClass]="getBadgeClass(v.estado)">
+              {{ v.estado }}
+            </span>
+          </td>
+          <td>{{ v.idUsuario }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loading && ventas.length === 0" class="empty">
+      Sin ventas registradas.
+    </div>
+  </div>
+</div>

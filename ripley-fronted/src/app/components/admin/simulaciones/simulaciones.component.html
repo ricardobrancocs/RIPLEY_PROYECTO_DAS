@@ -1,0 +1,49 @@
+<div class="topbar">
+  <span class="title">Simulaciones de escenarios</span>
+</div>
+
+<div class="content">
+  <div class="card">
+    <div class="chd"><span class="ct">Parámetros de simulación</span></div>
+    <div class="form-row">
+      <div class="field">
+        <label>Tipo de cambio (S//$)</label>
+        <input type="number" [(ngModel)]="form.tipoCambio" step="0.01" />
+      </div>
+      <div class="field">
+        <label>Inflación proyectada (%)</label>
+        <input type="number" [(ngModel)]="form.inflacionProyectada" step="0.1" />
+      </div>
+      <div class="field">
+        <label>Horizonte (días)</label>
+        <input type="number" [(ngModel)]="form.horizonteDias" />
+      </div>
+      <div class="field">
+        <label>Factor de ajuste</label>
+        <input type="number" [(ngModel)]="form.factorAjuste" step="0.01" />
+      </div>
+      <button class="btn-p" (click)="ejecutar()" [disabled]="loading">
+        {{ loading ? 'Simulando...' : 'Ejecutar simulación' }}
+      </button>
+    </div>
+    <div *ngIf="error" class="err">{{ error }}</div>
+  </div>
+
+  <div *ngIf="resultado" class="escenarios">
+    <div class="esc esc-g">
+      <div class="esc-label">Optimista</div>
+      <div class="esc-valor">S/ {{ resultado.optimista?.impactoFinanciero | number:'1.2-2' }}</div>
+      <div class="esc-nombre">{{ resultado.optimista?.nombreEscenario }}</div>
+    </div>
+    <div class="esc esc-a">
+      <div class="esc-label">Neutro</div>
+      <div class="esc-valor">S/ {{ resultado.neutro?.impactoFinanciero | number:'1.2-2' }}</div>
+      <div class="esc-nombre">{{ resultado.neutro?.nombreEscenario }}</div>
+    </div>
+    <div class="esc esc-r">
+      <div class="esc-label">Pesimista</div>
+      <div class="esc-valor">S/ {{ resultado.pesimista?.impactoFinanciero | number:'1.2-2' }}</div>
+      <div class="esc-nombre">{{ resultado.pesimista?.nombreEscenario }}</div>
+    </div>
+  </div>
+</div>

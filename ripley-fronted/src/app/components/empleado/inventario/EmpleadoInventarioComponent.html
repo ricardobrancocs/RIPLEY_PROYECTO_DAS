@@ -1,0 +1,82 @@
+<div class="page-wrap">
+
+  <div class="tabs">
+    <button class="tab" [class.active]="tab==='entrega'" (click)="tab='entrega'">
+      Validar entrega proveedor
+    </button>
+    <button class="tab" [class.active]="tab==='stock'" (click)="tab='stock'">
+      Consultar stock
+    </button>
+  </div>
+
+  <div class="inner">
+
+    <!-- ═══════════════════ VALIDAR ENTREGA PROVEEDOR ═══════════════════ -->
+    <ng-container *ngIf="tab==='entrega'">
+      <div class="info-box">
+        Confirma aquí cuando llegue mercadería aprobada por el administrador.
+        El stock se actualiza automáticamente.
+      </div>
+      <div class="card">
+        <div class="ct">Confirmar recepción de mercadería</div>
+        <div class="fg">
+          <div class="field">
+            <label>ID Proveedor</label>
+            <input type="number" [(ngModel)]="idProv" placeholder="Ej: 1"/>
+          </div>
+          <div class="field">
+            <label>ID Producto</label>
+            <input type="number" [(ngModel)]="idProd" placeholder="Ej: 2"/>
+          </div>
+          <div class="field">
+            <label>Cantidad recibida</label>
+            <input type="number" [(ngModel)]="cantRecibida" placeholder="Ej: 50"/>
+          </div>
+          <div class="field">
+            <label>Calificación proveedor (1-5)</label>
+            <input type="number" [(ngModel)]="calificacion" min="1" max="5"/>
+          </div>
+        </div>
+        <button class="btn-p" (click)="confirmarEntrega()" [disabled]="loadingE">
+          {{ loadingE ? 'Registrando...' : 'Confirmar recepción' }}
+        </button>
+        <div *ngIf="entregaMsg" class="ok-msg">{{ entregaMsg }}</div>
+        <div *ngIf="entregaErr" class="err-msg">{{ entregaErr }}</div>
+      </div>
+    </ng-container>
+
+    <!-- ═══════════════════════ CONSULTAR STOCK ═══════════════════════ -->
+    <ng-container *ngIf="tab==='stock'">
+      <div class="card">
+        <div class="ct">Stock general de productos</div>
+        <div *ngIf="loading" class="empty">Cargando stock...</div>
+        <table *ngIf="!loading">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Stock actual</th>
+              <th>Mínimo</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of stock">
+              <td>{{ p.nombre }}</td>
+              <td><strong>{{ p.stockActual }}</strong></td>
+              <td>{{ p.stockMinimo }}</td>
+              <td>
+                <span class="badge" [ngClass]="getEstadoClass(p.estado)">
+                  {{ p.estado }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="!loading && stock.length === 0" class="empty">
+          Sin productos en inventario.
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

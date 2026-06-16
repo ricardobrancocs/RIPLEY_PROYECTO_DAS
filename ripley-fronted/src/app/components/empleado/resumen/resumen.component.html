@@ -1,0 +1,46 @@
+<div class="topbar">
+  <span class="title">Mi resumen</span>
+  <span class="badge-emp">EMPLEADO</span>
+</div>
+
+<div class="content">
+  <div class="metrics">
+    <div class="mc">
+      <div class="ml">Stock crítico</div>
+      <div class="mv red">{{ criticos }}</div>
+      <div class="ms">productos</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Stock bajo</div>
+      <div class="mv amber">{{ bajos }}</div>
+      <div class="ms">productos</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Normal</div>
+      <div class="mv green">{{ normales }}</div>
+      <div class="ms">productos</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Accesos rápidos</div>
+    <div class="quick-grid">
+      <a routerLink="/empleado/ventas" class="quick-btn">
+        <span class="qb-icon">🧾</span>
+        <span>Nueva venta</span>
+      </a>
+      <a routerLink="/empleado/inventario" class="quick-btn">
+        <span class="qb-icon">📦</span>
+        <span>Validar entrega</span>
+      </a>
+      <a routerLink="/empleado/ventas" class="quick-btn">
+        <span class="qb-icon">↩️</span>
+        <span>Registrar devolución</span>
+      </a>
+      <a routerLink="/empleado/alertas" class="quick-btn">
+        <span class="qb-icon">🔔</span>
+        <span>Ver alertas</span>
+      </a>
+    </div>
+  </div>
+</div>

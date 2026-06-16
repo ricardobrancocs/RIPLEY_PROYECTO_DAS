@@ -1,0 +1,19 @@
+/* app.css — estilos globales del shell */
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+body {
+font-family: 'Inter', system-ui, -apple-system, sans-serif;
+background: #f5f5f3;
+color: #222;
+font-size: 16px;
+-webkit-font-smoothing: antialiased;
+}
+
+a {
+text-decoration: none;
+color: inherit;
+}

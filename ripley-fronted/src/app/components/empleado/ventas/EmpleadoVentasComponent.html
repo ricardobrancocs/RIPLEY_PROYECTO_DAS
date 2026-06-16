@@ -1,0 +1,207 @@
+<div class="page-wrap">
+
+  <div class="tabs">
+    <button class="tab" [class.active]="tab==='venta'"     (click)="tab='venta'">Nueva venta</button>
+    <button class="tab" [class.active]="tab==='delivery'"  (click)="tab='delivery'">Confirmar delivery</button>
+    <button class="tab" [class.active]="tab==='devolucion'"(click)="tab='devolucion'">Devoluciones</button>
+    <button class="tab" [class.active]="tab==='historial'" (click)="tab='historial'">Historial</button>
+  </div>
+
+  <div class="inner">
+
+    <!-- ═══════════════════════════ NUEVA VENTA ═══════════════════════════ -->
+    <ng-container *ngIf="tab==='venta'">
+
+      <!-- PASO 1: Tipo de entrega -->
+      <div *ngIf="paso===1" class="card">
+        <div class="ct">Paso 1 — Tipo de entrega</div>
+        <div class="tipo-grid">
+          <div class="tipo-btn" [class.sel]="tipo==='tienda'"
+              (click)="tipo='tienda'; paso=2">
+            <div class="tb-icon">🏪</div>
+            <div class="tb-name">Entrega en tienda</div>
+            <div class="tb-sub">Cliente retira en local</div>
+          </div>
+          <div class="tipo-btn" [class.sel]="tipo==='delivery'"
+              (click)="tipo='delivery'; paso=2">
+            <div class="tb-icon">🚚</div>
+            <div class="tb-name">Envío por delivery</div>
+            <div class="tb-sub">Despacho a domicilio</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 2: Datos -->
+      <div *ngIf="paso===2" class="card">
+        <div class="steps-row">
+          <span class="step done">1</span><span class="step-line done"></span>
+          <span class="step active">2</span><span class="step-line"></span>
+          <span class="step">3</span><span class="step-line"></span>
+          <span class="step">4</span>
+        </div>
+        <div class="ct">Paso 2 — Datos del producto</div>
+        <div class="fg">
+          <div class="field"><label>ID Venta</label><input type="number" [(ngModel)]="idVenta"/></div>
+          <div class="field"><label>ID Producto</label><input type="number" [(ngModel)]="idProducto"/></div>
+          <div class="field"><label>Cantidad</label><input type="number" [(ngModel)]="cantidad"/></div>
+          <div class="field"><label>Precio unit. (S/)</label><input type="number" [(ngModel)]="precio" step="0.01"/></div>
+        </div>
+
+        <div *ngIf="tipo==='tienda'" class="fg">
+          <div class="field"><label>Cliente</label><input [(ngModel)]="cliente" placeholder="Nombre completo"/></div>
+          <div class="field"><label>DNI</label><input [(ngModel)]="dni" placeholder="12345678"/></div>
+        </div>
+
+        <div *ngIf="tipo==='delivery'" class="fg">
+          <div class="field"><label>Destinatario</label><input [(ngModel)]="destinatario"/></div>
+          <div class="field"><label>Dirección</label><input [(ngModel)]="direccion"/></div>
+          <div class="field">
+            <label>Empresa delivery</label>
+            <select [(ngModel)]="empresaDelivery">
+              <option>Rappi</option><option>Glovo</option>
+              <option>Olva</option><option>Motorizado</option>
+            </select>
+          </div>
+          <div class="field"><label>Código guía</label><input [(ngModel)]="guia"/></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-o" (click)="paso=1">← Cambiar tipo</button>
+          <button class="btn-p" (click)="paso=3">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- PASO 3: Pago -->
+      <div *ngIf="paso===3" class="card">
+        <div class="steps-row">
+          <span class="step done">1</span><span class="step-line done"></span>
+          <span class="step done">2</span><span class="step-line done"></span>
+          <span class="step active">3</span><span class="step-line"></span>
+          <span class="step">4</span>
+        </div>
+        <div class="ct">Paso 3 — Método de pago</div>
+        <div class="tipo-grid">
+          <div class="tipo-btn" [class.sel]="metodoPago==='EFECTIVO'"
+               (click)="metodoPago='EFECTIVO'">💵 Efectivo</div>
+          <div class="tipo-btn" [class.sel]="metodoPago==='TARJETA'"
+               (click)="metodoPago='TARJETA'">💳 Tarjeta</div>
+          <div class="tipo-btn" [class.sel]="metodoPago==='TRANSFERENCIA'"
+               (click)="metodoPago='TRANSFERENCIA'">🏦 Transferencia</div>
+        </div>
+
+        <div *ngIf="metodoPago==='EFECTIVO'" class="fg">
+          <div class="field"><label>Monto recibido (S/)</label><input type="number" [(ngModel)]="montoRecibido" step="0.01"/></div>
+          <div class="field"><label>Vuelto (S/)</label><input type="number" [value]="calcVuelto()" readonly/></div>
+        </div>
+        <div *ngIf="metodoPago==='TARJETA'" class="fg">
+          <div class="field"><label>Últimos 4 dígitos</label><input [(ngModel)]="digitos" maxlength="4"/></div>
+          <div class="field">
+            <label>Tipo</label>
+            <select [(ngModel)]="tipoTarjeta">
+              <option>Visa</option><option>Mastercard</option><option>Amex</option>
+            </select>
+          </div>
+        </div>
+        <div *ngIf="metodoPago==='TRANSFERENCIA'" class="fg">
+          <div class="field"><label>N° operación</label><input [(ngModel)]="nroOperacion"/></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-o" (click)="paso=2">← Datos</button>
+          <button class="btn-p" [disabled]="!metodoPago" (click)="paso=4">Ver resumen →</button>
+        </div>
+      </div>
+
+      <!-- PASO 4: Confirmar -->
+      <div *ngIf="paso===4" class="card">
+        <div class="steps-row">
+          <span class="step done">1</span><span class="step-line done"></span>
+          <span class="step done">2</span><span class="step-line done"></span>
+          <span class="step done">3</span><span class="step-line done"></span>
+          <span class="step active">4</span>
+        </div>
+        <div class="ct">Paso 4 — Confirmar venta</div>
+        <div class="summary">
+          <div class="srow"><span>Tipo</span><span>{{ tipo | uppercase }}</span></div>
+          <div class="srow"><span>Venta #{{ idVenta }} · Producto #{{ idProducto }}</span><span>{{ cantidad }} uds.</span></div>
+          <div class="srow"><span>Método de pago</span><span>{{ metodoPago }}</span></div>
+          <hr/>
+          <div class="stotal">
+            <span>Total</span>
+            <span>S/ {{ (precio * cantidad).toFixed(2) }}</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-o" (click)="paso=3">← Editar pago</button>
+          <button class="btn-g" (click)="confirmarVenta()">✓ Confirmar venta</button>
+        </div>
+      </div>
+
+      <!-- PASO 5: Éxito -->
+      <div *ngIf="paso===5" class="card ok-card">
+        <div class="ok-title">
+          {{ tipo==='tienda' ? '✓ Entrega en tienda registrada' : '✓ Delivery registrado' }}
+        </div>
+        <div class="summary">
+          <div class="srow"><span>Comprobante</span><span>COMP-{{ compNum - 1 }}</span></div>
+          <div class="srow"><span>Total cobrado</span>
+            <span class="total-green">S/ {{ (precio * cantidad).toFixed(2) }}</span>
+          </div>
+        </div>
+        <button class="btn-o" (click)="resetVenta()">+ Nueva venta</button>
+      </div>
+
+    </ng-container>
+
+    <!-- ═══════════════════════ CONFIRMAR DELIVERY ═══════════════════════ -->
+    <ng-container *ngIf="tab==='delivery'">
+      <div class="card">
+        <div class="ct">Confirmar entrega al cliente</div>
+        <div class="fg">
+          <div class="field"><label>ID Venta</label><input type="number" [(ngModel)]="delId"/></div>
+          <div class="field"><label>Destinatario</label><input [(ngModel)]="delDest"/></div>
+          <div class="field"><label>Código guía</label><input [(ngModel)]="delGuia"/></div>
+        </div>
+        <button class="btn-p" (click)="confirmarDelivery()">Confirmar entregado al cliente</button>
+        <div *ngIf="delMsg" class="ok-msg">{{ delMsg }}</div>
+      </div>
+    </ng-container>
+
+    <!-- ═══════════════════════════ DEVOLUCIONES ═══════════════════════════ -->
+    <ng-container *ngIf="tab==='devolucion'">
+      <div class="card">
+        <div class="ct">Registrar devolución</div>
+        <div class="fg">
+          <div class="field"><label>ID Venta original</label><input type="number" [(ngModel)]="devVenta"/></div>
+          <div class="field"><label>ID Producto</label><input type="number" [(ngModel)]="devProd"/></div>
+          <div class="field"><label>Cantidad</label><input type="number" [(ngModel)]="devCant"/></div>
+          <div class="field">
+            <label>Motivo</label>
+            <select [(ngModel)]="devMotivo">
+              <option value="DEFECTO">Producto defectuoso</option>
+              <option value="CAMBIO_TALLA">Cambio de talla</option>
+              <option value="OTRO">Otro</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-p" (click)="registrarDevolucion()">Registrar devolución</button>
+        <div *ngIf="devMsg" class="ok-msg">{{ devMsg }}</div>
+      </div>
+    </ng-container>
+
+    <!-- ═══════════════════════════ HISTORIAL ═══════════════════════════ -->
+    <ng-container *ngIf="tab==='historial'">
+      <div class="card">
+        <div class="ct">Historial de ventas del turno</div>
+        <div *ngIf="historial.length===0" class="empty">Sin ventas registradas en este turno.</div>
+        <div *ngFor="let v of historial" class="hist-row">
+          <span class="hist-comp">COMP-{{ v.comp }}</span>
+          <span>{{ v.tipo }}</span>
+          <span class="hist-total">S/ {{ v.total }}</span>
+          <span class="hist-pago">{{ v.pago }}</span>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="topbar">
+  <span class="title">Trazabilidad</span>
+</div>
+
+<div class="content">
+  <div class="resumen">
+    <div class="mc">
+      <div class="ml">Total movimientos</div>
+      <div class="mv">{{ historial.length }}</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Entradas</div>
+      <div class="mv g">{{ entradas }}</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Salidas</div>
+      <div class="mv a">{{ salidas }}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chd"><span class="ct">Historial completo de movimientos</span></div>
+    <div *ngIf="loading" class="empty">Cargando historial...</div>
+    <table *ngIf="!loading">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Tipo</th>
+          <th>Ubicación</th>
+          <th>Responsable</th>
+          <th>Fecha</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of historial">
+          <td>#{{ t.idProducto }}</td>
+          <td>
+            <span class="badge" [ngClass]="getBadgeClass(t.tipoMovimiento)">
+              {{ t.tipoMovimiento }}
+            </span>
+          </td>
+          <td>{{ t.ubicacion }}</td>
+          <td>{{ t.responsable }}</td>
+          <td>{{ t.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ t.descripcion }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loading && historial.length === 0" class="empty">
+      Sin movimientos registrados.
+    </div>
+  </div>
+</div>

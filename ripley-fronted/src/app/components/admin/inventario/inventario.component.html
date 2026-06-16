@@ -1,0 +1,59 @@
+<div class="topbar">
+  <span class="title">Inventario</span>
+  <span class="subtitle">Vista de solo lectura — el admin aprueba reposición</span>
+</div>
+
+<div class="content">
+  <div class="resumen">
+    <div class="mc">
+      <div class="ml">Total productos</div>
+      <div class="mv">{{ stock.length }}</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Stock normal</div>
+      <div class="mv g">{{ contarEstado('NORMAL') }}</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Stock bajo</div>
+      <div class="mv a">{{ contarEstado('BAJO') }}</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Stock crítico</div>
+      <div class="mv r">{{ contarEstado('CRITICO') }}</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chd">
+      <span class="ct">Stock actual de todos los productos</span>
+    </div>
+    <div *ngIf="loading" class="empty">Cargando inventario...</div>
+    <table *ngIf="!loading">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Producto</th>
+          <th>Stock actual</th>
+          <th>Stock mínimo</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of stock">
+          <td>#{{ p.idProducto }}</td>
+          <td>{{ p.nombre }}</td>
+          <td><strong>{{ p.stockActual }}</strong></td>
+          <td>{{ p.stockMinimo }}</td>
+          <td>
+            <span class="badge" [ngClass]="getEstadoClass(p.estado)">
+              {{ p.estado }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="!loading && stock.length === 0" class="empty">
+      Sin productos en inventario.
+    </div>
+  </div>
+</div>

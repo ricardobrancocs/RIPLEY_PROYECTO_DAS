@@ -1,0 +1,50 @@
+<div class="topbar">
+  <span class="title">Reposición</span>
+</div>
+
+<div class="content">
+  <div class="resumen">
+    <div class="mc">
+      <div class="ml">Pendientes</div>
+      <div class="mv a">{{ pendientes }}</div>
+      <div class="ms">por aprobar</div>
+    </div>
+    <div class="mc">
+      <div class="ml">Aprobadas</div>
+      <div class="mv g">{{ aprobadas }}</div>
+      <div class="ms">generan entrada</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chd"><span class="ct">Recomendaciones de reposición</span></div>
+    <div *ngIf="loading" class="empty">Cargando recomendaciones...</div>
+
+    <div *ngFor="let r of recomendaciones" class="rec-row">
+      <div class="rec-body">
+        <div class="rec-nombre">{{ r.nombreProducto }}</div>
+        <div class="rec-detalle">
+          Proveedor: <strong>{{ r.nombreProveedorRec }}</strong> ·
+          Cantidad: <strong>{{ r.cantidadSugerida }}</strong> unidades ·
+          Costo est.: <strong>S/ {{ r.costoEstimado }}</strong>
+        </div>
+      </div>
+      <div class="rec-actions">
+        <span class="badge"
+          [ngClass]="{'badge-amber': r.estado === 'PENDIENTE', 'badge-green': r.estado === 'APROBADA'}">
+          {{ r.estado }}
+        </span>
+        <button
+          *ngIf="r.estado === 'PENDIENTE'"
+          class="btn-aprobar"
+          (click)="aprobar(r.idRecomendacion)">
+          Aprobar
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && recomendaciones.length === 0" class="empty">
+      Sin recomendaciones pendientes.
+    </div>
+  </div>
+</div>
